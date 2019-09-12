@@ -26,10 +26,10 @@ macro_rules! kvmap{
 macro_rules! hiccup{
     // ($tag:ident) => {Tag{name: stringify!($tag).into(), children:vec!()}};
     (@empty ()) => {};
-    (@props $($k:ident : $v:expr),+) => {
+    (@props $($k:ident : $v:expr),*) => {
         {
             let mut m = HashMap::new();
-            $(m.insert(stringify!($k), $v);)+
+            $(m.insert(stringify!($k), $v);)*
                 m
         }
     };
@@ -41,8 +41,8 @@ macro_rules! hiccup{
 
     ($tag:ident {$($props:tt)*} $([$($child:tt)*])*) => {
         {
-            // $(let props = hiccup!(@props $props)
-            //   println!("parsed props {:?}", props);)*;
+            let props = hiccup!(@props $($props)*);
+              println!("parsed props {:?}", props);
 
             let mut v = Vec::new();
             $(v.push(hiccup!($($child)*));)*
